@@ -27,7 +27,6 @@ export const ExtractDocumentDataOutputSchema = z.object({
   blAwDate: z.string().describe('The BL/AW Date.'),
   invoiceNumber: z.string().describe('The invoice number.'),
   invoiceDate: z.string().describe('The invoice date.'),
-  nameOfClearingAgent: z.string().describe('The name of the clearing agent.'),
   marksAndNos: z.string().describe('The marks and nos.'),
   country: z.string().describe('The country of origin or destination.'),
   items: z.array(ItemSchema).describe('A list of items from the document.'),

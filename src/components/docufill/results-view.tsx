@@ -115,87 +115,24 @@ export function ResultsView({ results, isLoading, onReset, fileName }: ResultsVi
 
             {results && (
                 <div className="space-y-6">
-                    <div className="grid gap-6 lg:grid-cols-3">
-                        {/* Extracted Data Card */}
-                        <Card className="lg:col-span-2">
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2"><FileText className="text-primary"/> Extracted Data</CardTitle>
-                                <CardDescription>Key information identified by the AI.</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-sm">
-                                    <div className="flex justify-between"><strong>Invoice #:</strong> <span>{results.extraction.invoiceNumber}</span></div>
-                                    <div className="flex justify-between"><strong>Invoice Date:</strong> <span>{results.extraction.invoiceDate}</span></div>
-                                    <div className="flex justify-between"><strong>BL/AW #:</strong> <span>{results.extraction.blAwNumber}</span></div>
-                                    <div className="flex justify-between"><strong>BL/AW Date:</strong> <span>{results.extraction.blAwDate}</span></div>
-                                    <div className="flex justify-between"><strong>Consignee:</strong> <span>{results.extraction.consigneeName}</span></div>
-                                    <div className="flex justify-between"><strong>Consignor:</strong> <span>{results.extraction.consignorName}</span></div>
-                                    <div className="flex justify-between"><strong>Clearing Agent:</strong> <span>{results.extraction.nameOfClearingAgent}</span></div>
-                                    <div className="flex justify-between"><strong>Country:</strong> <span>{results.extraction.country}</span></div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        {/* Totals Card */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2"><DollarSign className="text-primary" /> Invoice Totals</CardTitle>
-                                <CardDescription>Calculated invoice amounts.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <ul className="space-y-2 text-sm">
-                                    <li className="flex justify-between items-center">
-                                        <span className="text-muted-foreground">Subtotal</span>
-                                        <span className="font-semibold text-base">${results.extraction.subTotal?.toFixed(2) ?? '0.00'}</span>
-                                    </li>
-                                    <li className="flex justify-between items-center">
-                                        <span className="text-muted-foreground">Tax</span>
-                                        <span className="font-semibold text-base">${results.extraction.tax?.toFixed(2) ?? '0.00'}</span>
-                                    </li>
-                                    <li className="flex justify-between items-center border-t pt-2 mt-2">
-                                        <span className="text-foreground font-bold text-lg">Total</span>
-                                        <span className="font-bold text-primary text-xl">${results.extraction.totalAmount?.toFixed(2) ?? '0.00'}</span>
-                                    </li>
-                                </ul>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Validation & Mistakes Card */}
+                    {/* Extracted Data Card */}
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><ListChecks className="text-primary"/> Validation &amp; Analysis</CardTitle>
-                            <CardDescription>Automated checks for errors and inconsistencies.</CardDescription>
+                            <CardTitle className="flex items-center gap-2"><FileText className="text-primary"/> Extracted Data</CardTitle>
+                            <CardDescription>Key information identified by the AI.</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-4">
-                            {results.validation.isValid ? (
-                                <Alert variant="default" className="border-green-300 bg-green-50">
-                                    <CheckCircle2 className="h-4 w-4 text-green-600"/>
-                                    <AlertTitle className="text-green-800">Validation Passed</AlertTitle>
-                                    <AlertDescription className="text-green-700">No critical errors found in the extracted data.</AlertDescription>
-                                </Alert>
-                            ) : (
-                                <Alert variant="destructive">
-                                    <AlertTriangle className="h-4 w-4"/>
-                                    <AlertTitle>Validation Failed</AlertTitle>
-                                    <AlertDescription>
-                                        <ul className="list-disc pl-5">
-                                            {results.validation.errors.map((err, i) => <li key={i}><strong>{err.field}:</strong> {err.message}</li>)}
-                                        </ul>
-                                    </AlertDescription>
-                                </Alert>
-                            )}
-                            {results.mistakes.highlightedMistakes.length > 0 && (
-                                <div>
-                                    <h4 className="font-semibold mb-2 mt-4">Potential Mistakes:</h4>
-                                    <ul className="list-disc pl-5 text-sm text-muted-foreground">
-                                        {results.mistakes.highlightedMistakes.map((mistake, i) => <li key={i}>{mistake}</li>)}
-                                    </ul>
-                                </div>
-                            )}
+                        <CardContent>
+                            <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-sm">
+                                <div className="flex justify-between"><strong>Invoice #:</strong> <span>{results.extraction.invoiceNumber}</span></div>
+                                <div className="flex justify-between"><strong>Invoice Date:</strong> <span>{results.extraction.invoiceDate}</span></div>
+                                <div className="flex justify-between"><strong>BL/AW #:</strong> <span>{results.extraction.blAwNumber}</span></div>
+                                <div className="flex justify-between"><strong>BL/AW Date:</strong> <span>{results.extraction.blAwDate}</span></div>
+                                <div className="flex justify-between"><strong>Consignee:</strong> <span>{results.extraction.consigneeName}</span></div>
+                                <div className="flex justify-between"><strong>Consignor:</strong> <span>{results.extraction.consignorName}</span></div>
+                                <div className="flex justify-between"><strong>Country:</strong> <span>{results.extraction.country}</span></div>
+                            </div>
                         </CardContent>
                     </Card>
-
 
                      {/* Items Card */}
                     <Card>
