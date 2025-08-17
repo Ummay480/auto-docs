@@ -44,7 +44,7 @@ const validateExtractedDataPrompt = ai.definePrompt({
   prompt: `You are an AI expert in document validation, particularly for logistics and trade documents.  Your task is to validate the extracted data from a given document, identify potential errors, and suggest corrections.
 
 Document Type: {{{documentType}}}
-Extracted Data: {{{extractedData}}}
+Extracted Data: {{{JSON.stringify extractedData}}}
 
 Consider the following aspects during validation:
 - Completeness: Ensure all required fields are present and not empty.
@@ -53,9 +53,7 @@ Consider the following aspects during validation:
 - Quantity and Weight: Ensure the quantity and weight are reasonable and consistent with the product and document type.
 - Consignor/Consignee Details: Check for completeness and validity of consignor and consignee information.
 
-Based on your analysis, determine if the extracted data is valid. If not, provide a list of errors with specific field names and descriptive messages.  Also, provide a validatedData object, containing the original data, with any corrections that you've identified applied to it.  If no corrections are necessary, the validatedData object should be identical to the extractedData object.
-
-Output in the following JSON format: {{{outputFormat schema=ValidateExtractedDataOutputSchema}}}`,
+Based on your analysis, determine if the extracted data is valid. If not, provide a list of errors with specific field names and descriptive messages.  Also, provide a validatedData object, containing the original data, with any corrections that you've identified applied to it.  If no corrections are necessary, the validatedData object should be identical to the extractedData object.`,
 });
 
 const validateExtractedDataFlow = ai.defineFlow(
