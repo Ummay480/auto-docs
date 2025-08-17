@@ -10,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { ExtractDocumentDataOutputSchema } from '../schemas';
 
 const ValidateExtractedDataInputSchema = z.object({
   extractedData: z.record(z.any()).describe('The extracted data to validate.'),
@@ -25,7 +26,7 @@ const ValidationErrorSchema = z.object({
 const ValidateExtractedDataOutputSchema = z.object({
   isValid: z.boolean().describe('Whether the extracted data is valid.'),
   errors: z.array(ValidationErrorSchema).describe('A list of validation errors, if any.'),
-  validatedData: z.record(z.any()).describe('The validated and potentially corrected data.'),
+  validatedData: ExtractDocumentDataOutputSchema.describe('The validated and potentially corrected data.'),
 });
 export type ValidateExtractedDataOutput = z.infer<typeof ValidateExtractedDataOutputSchema>;
 
