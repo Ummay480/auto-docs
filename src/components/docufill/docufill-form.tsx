@@ -5,12 +5,10 @@ import { UploadCloud, Loader2, File as FileIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 
 export type FormValues = {
   file: File | null;
-  documentType: string;
 };
 
 interface DocufillFormProps {
@@ -18,11 +16,8 @@ interface DocufillFormProps {
   isLoading: boolean;
 }
 
-const DOCUMENT_TYPES = ['Invoice', 'Packing List', 'Bill of Lading (BL)', 'GD Form'];
-
 export function DocufillForm({ onSubmit, isLoading }: DocufillFormProps) {
   const [file, setFile] = useState<File | null>(null);
-  const [docType, setDocType] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -55,34 +50,20 @@ export function DocufillForm({ onSubmit, isLoading }: DocufillFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ file, documentType: docType });
+    onSubmit({ file });
   };
 
   return (
     <div className="max-w-3xl mx-auto">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Upload Your Document</CardTitle>
-          <CardDescription>Select a document type and upload a file to begin extraction.</CardDescription>
+          <CardTitle className="text-2xl">Upload Your Invoice</CardTitle>
+          <CardDescription>Upload a file to begin extraction.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="doc-type">Document Type</Label>
-              <Select value={docType} onValueChange={setDocType} required>
-                <SelectTrigger id="doc-type" className="w-full">
-                  <SelectValue placeholder="Select a document type..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {DOCUMENT_TYPES.map((type) => (
-                    <SelectItem key={type} value={type}>{type}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="file-upload">Document File</Label>
+              <Label htmlFor="file-upload">Invoice File</Label>
               <label
                 htmlFor="file-upload"
                 className={cn(
@@ -126,7 +107,7 @@ export function DocufillForm({ onSubmit, isLoading }: DocufillFormProps) {
               </label>
             </div>
             
-            <Button type="submit" className="w-full" disabled={!file || !docType || isLoading}>
+            <Button type="submit" className="w-full" disabled={!file || isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

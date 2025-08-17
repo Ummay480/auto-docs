@@ -13,7 +13,7 @@ export function DocuFillClient() {
   const [fileName, setFileName] = useState('');
   const { toast } = useToast();
 
-  const handleProcessDocument = async ({ file, documentType }: FormValues) => {
+  const handleProcessDocument = async ({ file }: FormValues) => {
     if (!file) return;
 
     setIsLoading(true);
@@ -31,7 +31,7 @@ export function DocuFillClient() {
 
     try {
         const docDataUri = await fileToDataUrl(file);
-        const aiResults = await runAllAiFlows(docDataUri, documentType);
+        const aiResults = await runAllAiFlows(docDataUri, "Invoice");
         setResults(aiResults);
     } catch (error) {
         console.error("Error processing document:", error);
