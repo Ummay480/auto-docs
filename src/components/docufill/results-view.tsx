@@ -125,8 +125,10 @@ export function ResultsView({ results, isLoading, onReset, fileName }: ResultsVi
                             <CardContent>
                                 <ul className="space-y-2 text-sm">
                                     <li className="flex justify-between"><strong>Invoice Number:</strong> <span>{results.extraction.invoiceNumber}</span></li>
-                                    <li className="flex justify-between"><strong>HS Code:</strong> <Badge variant="secondary">{results.extraction.hsCode}</Badge></li>
-                                    <li className="flex justify-between"><strong>Quantity:</strong> <span>{results.extraction.quantity}</span></li>
+                                    <li className="flex justify-between"><strong>Invoice Date:</strong> <span>{results.extraction.invoiceDate}</span></li>
+                                    <li className="flex justify-between"><strong>BL/AW Number:</strong> <span>{results.extraction.blAwNumber}</span></li>
+                                    <li className="flex justify-between"><strong>Consignee:</strong> <span>{results.extraction.consigneeName}</span></li>
+                                    <li className="flex justify-between"><strong>Consignor:</strong> <span>{results.extraction.consignorName}</span></li>
                                 </ul>
                             </CardContent>
                         </Card>
@@ -166,6 +168,42 @@ export function ResultsView({ results, isLoading, onReset, fileName }: ResultsVi
                             </CardContent>
                         </Card>
                     </div>
+
+                     {/* Items Card */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><ListChecks className="text-primary" /> Items Information</CardTitle>
+                            <CardDescription>Details of the items from the document.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>HS Code</TableHead>
+                                        <TableHead>Description</TableHead>
+                                        <TableHead>UOM</TableHead>
+                                        <TableHead className="text-right">Weight (Kg)</TableHead>
+                                        <TableHead className="text-right">Quantity</TableHead>
+                                        <TableHead className="text-right">Unit Value ($)</TableHead>
+                                        <TableHead className="text-right">Total Value ($)</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {results.extraction.items.map((item, i) => (
+                                        <TableRow key={i}>
+                                            <TableCell><Badge variant="secondary">{item.hsCode}</Badge></TableCell>
+                                            <TableCell>{item.descriptionOfGoods}</TableCell>
+                                            <TableCell>{item.uom}</TableCell>
+                                            <TableCell className="text-right">{item.weightKg.toFixed(2)}</TableCell>
+                                            <TableCell className="text-right">{item.quantity.toFixed(2)}</TableCell>
+                                            <TableCell className="text-right">{item.unitValue.toFixed(2)}</TableCell>
+                                            <TableCell className="text-right">{item.totalValue.toFixed(2)}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
 
                     {/* Summary Card */}
                     <Card>
