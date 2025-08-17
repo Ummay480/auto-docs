@@ -31,6 +31,9 @@ export const ExtractDocumentDataOutputSchema = z.object({
   marksAndNos: z.string().describe('The marks and nos.'),
   country: z.string().describe('The country of origin or destination.'),
   items: z.array(ItemSchema).describe('A list of items from the document.'),
+  subTotal: z.number().describe('The sub-total amount.'),
+  tax: z.number().describe('The tax amount or percentage.'),
+  totalAmount: z.number().describe('The total invoice amount.'),
   bondedCarrier: z.string().describe('The bonded carrier.'),
   containerNo: z.string().describe('The container number.'),
   detailsAdditionalInformation: z
