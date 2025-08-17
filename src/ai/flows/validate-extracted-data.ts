@@ -36,7 +36,10 @@ export async function validateExtractedData(input: ValidateExtractedDataInput): 
 const validateExtractedDataPrompt = ai.definePrompt({
   name: 'validateExtractedDataPrompt',
   input: {
-    schema: ValidateExtractedDataInputSchema,
+    schema: z.object({
+      documentType: z.string(),
+      extractedData: z.string(), // We'll pass the stringified JSON here
+    }),
   },
   output: {
     schema: ValidateExtractedDataOutputSchema,
@@ -44,7 +47,7 @@ const validateExtractedDataPrompt = ai.definePrompt({
   prompt: `You are an AI expert in document validation, particularly for logistics and trade documents.  Your task is to validate the extracted data from a given document, identify potential errors, and suggest corrections.
 
 Document Type: {{{documentType}}}
-Extracted Data: {{{JSON.stringify extractedData}}}
+Extracted Data: {{{extractedData}}}
 
 Consider the following aspects during validation:
 - Completeness: Ensure all required fields are present and not empty.
@@ -62,8 +65,11 @@ const validateExtractedDataFlow = ai.defineFlow(
     inputSchema: ValidateExtractedDataInputSchema,
     outputSchema: ValidateExtractedDataOutputSchema,
   },
-  async input => {
-    const {output} = await validateExtractedDataPrompt(input);
+  async (input) => {
+    const {output} = await validateExtractedDataPrompt({
+      ...input,
+      extractedData: JSON.stringify(input.extractedData, null, 2),
+    });
     return output!;
   }
 );
