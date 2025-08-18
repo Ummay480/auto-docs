@@ -6,10 +6,6 @@ import {
   type ExtractDocumentDataOutput,
 } from '@/ai/flows/extract-document-data';
 import {
-  generateDocumentSummary,
-  type GenerateDocumentSummaryOutput,
-} from '@/ai/flows/generate-document-summary';
-import {
   generateExcelTemplate,
   type GenerateExcelTemplateOutput,
 } from '@/ai/flows/generate-excel-template';
@@ -25,7 +21,6 @@ import {
 export type AiFlowResults = {
   extraction: ExtractDocumentDataOutput;
   validation: ValidateExtractedDataOutput;
-  summary: GenerateDocumentSummaryOutput;
   mistakes: HighlightCommonMistakesOutput;
   template: GenerateExcelTemplateOutput;
 };
@@ -41,12 +36,11 @@ export async function runAllAiFlows(
     const docType = "B/L";
 
     // Run remaining flows in parallel for efficiency.
-    const [validation, summary, mistakes, template] = await Promise.all([
+    const [validation, mistakes, template] = await Promise.all([
       validateExtractedData({ extractedData: extraction, documentType: docType }),
-      generateDocumentSummary({ documentText }),
       highlightCommonMistakes({ documentText, documentType: docType }),
       generateExcelTemplate({ documentType: docType, extractedData: documentText }),
     ]);
 
-    return { extraction, validation, summary, mistakes, template };
+    return { extraction, validation, mistakes, template };
 }

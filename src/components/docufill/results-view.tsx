@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CheckCircle2, AlertTriangle, Download, FileText, Bot, ListChecks, FileSpreadsheet, RotateCcw, Loader2, DollarSign } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Download, FileText, ListChecks, FileSpreadsheet, RotateCcw, Loader2 } from 'lucide-react';
 import type { AiFlowResults } from '@/app/actions';
 import { Skeleton } from '../ui/skeleton';
 
@@ -152,17 +152,6 @@ export function ResultsView({ results, isLoading, onReset, fileName }: ResultsVi
                                     ))}
                                 </TableBody>
                             </Table>
-                        </CardContent>
-                    </Card>
-
-                    {/* Summary Card */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Bot className="text-primary"/> AI Summary</CardTitle>
-                            <CardDescription>A concise summary generated from the document data.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-sm text-foreground">{results.summary.summary}</p>
                         </CardContent>
                     </Card>
 
