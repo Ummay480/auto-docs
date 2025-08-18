@@ -31,10 +31,11 @@ export type AiFlowResults = {
 };
 
 export async function runAllAiFlows(
-  docDataUri: string,
+  invoiceDataUri: string,
+  blDataUri: string,
   docType: string
 ): Promise<AiFlowResults> {
-    const extraction = await extractDocumentData({ documentDataUri: docDataUri });
+    const extraction = await extractDocumentData({ documentDataUri: invoiceDataUri, blDataUri: blDataUri });
 
     // Use the structured data from extraction for subsequent steps.
     // Stringify the JSON to create a "text" version for text-based flows.
