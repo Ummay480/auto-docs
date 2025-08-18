@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CheckCircle2, AlertTriangle, Download, FileText, ListChecks, FileSpreadsheet, RotateCcw, Loader2 } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Download, FileText, ListChecks, FileSpreadsheet, RotateCcw, Loader2, BookCheck } from 'lucide-react';
 import type { AiFlowResults } from '@/app/actions';
 import { Skeleton } from '../ui/skeleton';
 
@@ -163,6 +163,36 @@ export function ResultsView({ results, isLoading, onReset, fileName }: ResultsVi
                             </Table>
                         </CardContent>
                     </Card>
+
+                    {/* Applicable SROs Card */}
+                    {results.sro.sros.length > 0 && (
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2"><BookCheck className="text-primary" /> Applicable SROs</CardTitle>
+                                <CardDescription>Statutory Regulatory Orders that may apply to the items in this document.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>HS Code</TableHead>
+                                            <TableHead>SRO Number</TableHead>
+                                            <TableHead>Purpose</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {results.sro.sros.map((sro, i) => (
+                                            <TableRow key={i}>
+                                                <TableCell><Badge variant="secondary">{sro.hsCode}</Badge></TableCell>
+                                                <TableCell className="font-medium">{sro.sroNumber}</TableCell>
+                                                <TableCell>{sro.purpose}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </CardContent>
+                        </Card>
+                    )}
 
                     {/* Template Card */}
                     <Card>

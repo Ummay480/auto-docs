@@ -17,12 +17,17 @@ import {
   validateExtractedData,
   type ValidateExtractedDataOutput,
 } from '@/ai/flows/validate-extracted-data';
+import {
+  findApplicableSro,
+  type FindApplicableSroOutput,
+} from '@/ai/flows/find-applicable-sro';
 
 export type AiFlowResults = {
   extraction: ExtractDocumentDataOutput;
   validation: ValidateExtractedDataOutput;
   mistakes: HighlightCommonMistakesOutput;
   template: GenerateExcelTemplateOutput;
+  sro: FindApplicableSroOutput;
 };
 
 export async function runAllAiFlows(
@@ -36,11 +41,12 @@ export async function runAllAiFlows(
     const docType = "B/L";
 
     // Run remaining flows in parallel for efficiency.
-    const [validation, mistakes, template] = await Promise.all([
+    const [validation, mistakes, template, sro] = await Promise.all([
       validateExtractedData({ extractedData: extraction, documentType: docType }),
       highlightCommonMistakes({ documentText, documentType: docType }),
       generateExcelTemplate({ documentType: docType, extractedData: documentText }),
+      findApplicableSro({ items: extraction.items }),
     ]);
 
-    return { extraction, validation, mistakes, template };
+    return { extraction, validation, mistakes, template, sro };
 }
