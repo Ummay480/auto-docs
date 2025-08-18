@@ -1,5 +1,8 @@
 'use client';
 
+import { useRef } from 'react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -17,31 +20,37 @@ interface ResultsViewProps {
 }
 
 export function ResultsView({ results, isLoading, onReset, fileName }: ResultsViewProps) {
-    const handleDownload = () => {
-        if (!results?.template.invoiceHtml) return;
-        const blob = new Blob([results.template.invoiceHtml], { type: 'text/html;charset=utf-8;' });
-        const link = document.createElement("a");
-        if (link.download !== undefined) {
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", `invoice.html`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+    const invoiceRef = useRef<HTMLDivElement>(null);
+
+    const handleDownload = async () => {
+        if (!invoiceRef.current) return;
+    
+        try {
+          const canvas = await html2canvas(invoiceRef.current, {
+            scale: 2, 
+            useCORS: true,
+          });
+    
+          const imgData = canvas.toDataURL('image/png');
+          const pdf = new jsPDF({
+            orientation: 'p',
+            unit: 'px',
+            format: [canvas.width, canvas.height],
+          });
+          
+          pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height, undefined, 'FAST');
+          pdf.save('invoice.pdf');
+        } catch (error) {
+          console.error("Error generating PDF:", error);
         }
-    };
+      };
 
     const InvoiceHtmlView = () => {
       if (!results?.template.invoiceHtml) return <p>No invoice data available.</p>;
 
       return (
-          <div className="overflow-x-auto relative border rounded-lg p-4 bg-white">
-              <iframe
-                  srcDoc={results.template.invoiceHtml}
-                  className="w-full h-[600px] border-0"
-                  title="Generated Invoice"
-              />
+          <div className="overflow-x-auto relative border rounded-lg bg-white">
+              <div ref={invoiceRef} dangerouslySetInnerHTML={{ __html: results.template.invoiceHtml }} />
           </div>
       );
   };
