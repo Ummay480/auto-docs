@@ -18,13 +18,13 @@ interface ResultsViewProps {
 
 export function ResultsView({ results, isLoading, onReset, fileName }: ResultsViewProps) {
     const handleDownload = () => {
-        if (!results) return;
-        const blob = new Blob([results.template.excelTemplate], { type: 'text/csv;charset=utf-8;' });
+        if (!results?.template.invoiceHtml) return;
+        const blob = new Blob([results.template.invoiceHtml], { type: 'text/html;charset=utf-8;' });
         const link = document.createElement("a");
         if (link.download !== undefined) {
             const url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
-            link.setAttribute("download", `docufill_template_${fileName}.csv`);
+            link.setAttribute("download", `invoice.html`);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -32,34 +32,19 @@ export function ResultsView({ results, isLoading, onReset, fileName }: ResultsVi
         }
     };
 
-    const CsvTable = () => {
-        if (!results?.template.excelTemplate) return <p>No template data available.</p>;
+    const InvoiceHtmlView = () => {
+      if (!results?.template.invoiceHtml) return <p>No invoice data available.</p>;
 
-        const rows = results.template.excelTemplate.split('\n').filter(row => row.trim() !== '');
-        if (rows.length === 0) return <p>Template is empty.</p>;
-
-        const headers = rows[0].split(',');
-        const bodyRows = rows.slice(1).map(row => row.split(','));
-
-        return (
-            <div className="overflow-x-auto relative border rounded-lg">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            {headers.map((header, i) => <TableHead key={i}>{header.trim()}</TableHead>)}
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {bodyRows.map((row, i) => (
-                            <TableRow key={i}>
-                                {row.map((cell, j) => <TableCell key={j}>{cell.trim()}</TableCell>)}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
-        );
-    };
+      return (
+          <div className="overflow-x-auto relative border rounded-lg p-4 bg-white">
+              <iframe
+                  srcDoc={results.template.invoiceHtml}
+                  className="w-full h-[600px] border-0"
+                  title="Generated Invoice"
+              />
+          </div>
+      );
+  };
 
     const LoadingSkeleton = () => (
       <div className="space-y-6">
@@ -186,14 +171,14 @@ export function ResultsView({ results, isLoading, onReset, fileName }: ResultsVi
                         <CardHeader>
                            <div className="flex justify-between items-start">
                              <div>
-                                <CardTitle className="flex items-center gap-2"><FileSpreadsheet className="text-primary"/> Generated Template</CardTitle>
-                                <CardDescription>Formatted for easy copy-paste into customs systems.</CardDescription>
+                                <CardTitle className="flex items-center gap-2"><FileSpreadsheet className="text-primary"/> Generated Invoice</CardTitle>
+                                <CardDescription>A printable invoice generated from the extracted data.</CardDescription>
                              </div>
-                             <Button onClick={handleDownload}><Download className="mr-2 h-4 w-4" /> Download CSV</Button>
+                             <Button onClick={handleDownload}><Download className="mr-2 h-4 w-4" /> Download Invoice</Button>
                            </div>
                         </CardHeader>
                         <CardContent>
-                            <CsvTable />
+                            <InvoiceHtmlView />
                         </CardContent>
                     </Card>
                 </div>

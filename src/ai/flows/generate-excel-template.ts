@@ -1,9 +1,9 @@
 'use server';
 
 /**
- * @fileOverview Flow to generate a pre-filled Excel template from extracted data.
+ * @fileOverview Flow to generate a pre-filled HTML invoice from extracted data.
  *
- * - generateExcelTemplate - A function that generates an Excel template.
+ * - generateExcelTemplate - A function that generates an HTML invoice.
  * - GenerateExcelTemplateInput - The input type for the generateExcelTemplate function.
  * - GenerateExcelTemplateOutput - The return type for the generateExcelTemplate function.
  */
@@ -24,14 +24,9 @@ const GenerateExcelTemplateInputSchema = z.object({
 export type GenerateExcelTemplateInput = z.infer<typeof GenerateExcelTemplateInputSchema>;
 
 const GenerateExcelTemplateOutputSchema = z.object({
-  excelTemplate: z
+  invoiceHtml: z
     .string()
-    .describe('A string representation of the generated Excel/CSV template data.'),
-  columnDefinitions: z
-    .string()
-    .describe(
-      'A JSON string containing an array of column definitions, useful for displaying the template structure.'
-    ),
+    .describe('A string containing a full, well-structured HTML document for the invoice.'),
 });
 export type GenerateExcelTemplateOutput = z.infer<typeof GenerateExcelTemplateOutputSchema>;
 
@@ -45,16 +40,11 @@ const prompt = ai.definePrompt({
   name: 'generateExcelTemplatePrompt',
   input: {schema: GenerateExcelTemplateInputSchema},
   output: {schema: GenerateExcelTemplateOutputSchema},
-  prompt: `You are an AI assistant specialized in generating Excel/CSV templates pre-filled with data extracted from various types of documents like invoices, packing lists, and bills of lading.
+  prompt: `You are an AI assistant specialized in creating professional commercial invoices.
 
-  The user will provide you with the document type and the extracted data in JSON format. Your task is to generate a template suitable for easy copy-pasting into systems like WEBOC.
+  Based on the provided extracted data in JSON format, generate a clean, well-structured, and styled HTML document representing the invoice.
 
-  Instructions:
-  1. Analyze the document type to understand the expected data fields.
-  2. Examine the extracted data to identify available information.
-  3. Generate a CSV formatted string that has the column names extracted from the extracted data.
-  4. Use the extracted data to populate the rows.
-  5. Return the column definitions in a JSON format.
+  Use inline CSS for styling to ensure the invoice looks good. The design should be professional, with clear sections for consignor, consignee, invoice details, item descriptions, and totals. The entire output should be a single HTML string.
 
   Document Type: {{{documentType}}}
   Extracted Data: {{{extractedData}}}
