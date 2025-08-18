@@ -31,15 +31,14 @@ export type AiFlowResults = {
 };
 
 export async function runAllAiFlows(
-  invoiceDataUri: string,
-  blDataUri: string,
-  docType: string
+  blDataUri: string
 ): Promise<AiFlowResults> {
-    const extraction = await extractDocumentData({ documentDataUri: invoiceDataUri, blDataUri: blDataUri });
+    const extraction = await extractDocumentData({ blDataUri: blDataUri });
 
     // Use the structured data from extraction for subsequent steps.
     // Stringify the JSON to create a "text" version for text-based flows.
     const documentText = JSON.stringify(extraction, null, 2);
+    const docType = "B/L";
 
     // Run remaining flows in parallel for efficiency.
     const [validation, summary, mistakes, template] = await Promise.all([

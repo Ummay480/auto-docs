@@ -15,12 +15,7 @@ import { ExtractDocumentDataOutput, ExtractDocumentDataOutputSchema } from '../s
 export type { ExtractDocumentDataOutput };
 
 const ExtractDocumentDataInputSchema = z.object({
-  documentDataUri: z
-    .string()
-    .describe(
-      "The invoice document, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'"
-    ),
-    blDataUri: z
+  blDataUri: z
     .string()
     .describe(
       "The Bill of Lading (B/L) document, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'"
@@ -37,11 +32,10 @@ const prompt = ai.definePrompt({
   name: 'extractDocumentDataPrompt',
   input: {schema: ExtractDocumentDataInputSchema},
   output: {schema: ExtractDocumentDataOutputSchema},
-  prompt: `You are an expert data extraction specialist.
+  prompt: `You are an expert in logistics documentation. Your task is to create a commercial invoice based on the provided Bill of Lading (B/L).
 
-You will extract all the relevant fields from the provided Invoice and Bill of Lading (B/L) documents. If there is conflicting information between the two documents, prioritize the information from the Invoice.
+You will extract all relevant information from the B/L and use it to populate the fields of an invoice. If some invoice-specific fields like invoice number, invoice date, or item values are not present in the B/L, you must generate logical placeholder values for them.
 
-Invoice: {{media url=documentDataUri}}
 Bill of Lading: {{media url=blDataUri}}
 `,
 });

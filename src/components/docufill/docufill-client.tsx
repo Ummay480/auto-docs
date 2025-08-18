@@ -13,12 +13,12 @@ export function DocuFillClient() {
   const [fileName, setFileName] = useState('');
   const { toast } = useToast();
 
-  const handleProcessDocument = async ({ invoiceFile, blFile }: FormValues) => {
-    if (!invoiceFile || !blFile) return;
+  const handleProcessDocument = async ({ blFile }: FormValues) => {
+    if (!blFile) return;
 
     setIsLoading(true);
     setResults(null);
-    setFileName(invoiceFile.name);
+    setFileName(blFile.name);
 
     const fileToDataUrl = (fileToConvert: File): Promise<string> => {
         return new Promise((resolve, reject) => {
@@ -30,9 +30,8 @@ export function DocuFillClient() {
     };
 
     try {
-        const invoiceDataUri = await fileToDataUrl(invoiceFile);
         const blDataUri = await fileToDataUrl(blFile);
-        const aiResults = await runAllAiFlows(invoiceDataUri, blDataUri, "Invoice");
+        const aiResults = await runAllAiFlows(blDataUri);
         setResults(aiResults);
     } catch (error) {
         console.error("Error processing document:", error);

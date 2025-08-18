@@ -8,7 +8,6 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 export type FormValues = {
-  invoiceFile: File | null;
   blFile: File | null;
 };
 
@@ -108,45 +107,35 @@ const FileUploadArea = ({
 
 
 export function DocufillForm({ onSubmit, isLoading }: DocufillFormProps) {
-  const [invoiceFile, setInvoiceFile] = useState<File | null>(null);
   const [blFile, setBlFile] = useState<File | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ invoiceFile, blFile });
+    onSubmit({ blFile });
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-2xl mx-auto">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Upload Your Documents</CardTitle>
-          <CardDescription>Upload an Invoice and Bill of Lading to begin extraction.</CardDescription>
+          <CardTitle className="text-2xl">Upload Bill of Lading</CardTitle>
+          <CardDescription>Upload a B/L to generate an invoice and begin extraction.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FileUploadArea
-                id="invoice-upload"
-                title="Invoice File"
-                file={invoiceFile}
-                onFileChange={setInvoiceFile}
-              />
               <FileUploadArea
                 id="bl-upload"
                 title="Bill of Lading File"
                 file={blFile}
                 onFileChange={setBlFile}
               />
-            </div>
-            
-            <Button type="submit" className="w-full" disabled={!invoiceFile || !blFile || isLoading}>
+            <Button type="submit" className="w-full" disabled={!blFile || isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Processing...
                 </>
-              ) : "Process Documents"}
+              ) : "Process Document"}
             </Button>
           </form>
         </CardContent>
